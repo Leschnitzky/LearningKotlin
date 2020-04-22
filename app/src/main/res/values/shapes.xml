@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="ShapeAppearance.LearningKotlin.SmallComponent" parent="ShapeAppearance.MaterialComponents.SmallComponent">
+
+    </style>
+
+
+    <style name="ShapeAppearance.LearningKotlin.SmallComponent.Button">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">40dp</item>
+    </style>
+
+    <style name="ShapeAppearance.LearningKotlin.SmallComponent.TextInputLayout" >
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">5dp</item>
+    </style>
+
+</resources>
