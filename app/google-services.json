@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "211676233586",
+    "firebase_url": "https://learningkotlin-42a8a.firebaseio.com",
+    "project_id": "learningkotlin-42a8a",
+    "storage_bucket": "learningkotlin-42a8a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:211676233586:android:24e3d935e3425d62afa7eb",
+        "android_client_info": {
+          "package_name": "com.example.learningkotlin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "211676233586-g4hqadt86audl2e7unfmuno6j6ub861n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.learningkotlin",
+            "certificate_hash": "b7a846a7838b438f5d530e96fd3a35004c0eaae6"
+          }
+        },
+        {
+          "client_id": "211676233586-5ptlnq2t28dtv3kqkt1jqcamd69j8t6r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDX7SVijAECY6fYjC6TkiZejIZn5S3Qcfo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "211676233586-5ptlnq2t28dtv3kqkt1jqcamd69j8t6r.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

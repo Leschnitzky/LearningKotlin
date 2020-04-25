@@ -15,36 +15,97 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.learningkotlin.MainActivity
 import com.example.learningkotlin.R
 import com.example.learningkotlin.databinding.FragmentHomeBinding
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 
 class HomeFragment : Fragment() {
 
+    private lateinit var auth: FirebaseAuth
     private lateinit var homeViewModel: HomeViewModel
-    private lateinit var editText: EditText
+    private lateinit var userEditText: EditText
+    private lateinit var passEditText: EditText
     private lateinit var loginButton: Button
+    private lateinit var signupButton: Button
     private lateinit var binding : FragmentHomeBinding
     private lateinit var userInputLayout: TextInputLayout
+    private lateinit var passInputLayout: TextInputLayout
+    val USER_PATTERN = "^[_A-z0-9]*((-|)*[_A-z0-9])*\$".toRegex()
+
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
+        auth = FirebaseAuth.getInstance()
         homeViewModel =
                 ViewModelProviders.of(this).get(HomeViewModel::class.java)
         binding = FragmentHomeBinding.inflate(inflater, container,false)
 
         userInputLayout = binding.textInputLayout
-        editText = binding.loginUserEditText
+        passInputLayout = binding.textInputLayout2
+        userEditText = binding.loginUserEditText
+        userEditText.setOnFocusChangeListener {
+                _, hasFocus ->
+            if(hasFocus)
+                userInputLayout.isErrorEnabled = false
+        }
+        passEditText = binding.loginPassEditText
+        passEditText.setOnFocusChangeListener {
+                _, hasFocus ->
+            if(hasFocus)
+                passInputLayout.isErrorEnabled = false
+        }
         loginButton = binding.loginButton
 
         loginButton.setOnClickListener {
-            if(editText.text.isEmpty()){
-                Toast.makeText(context,"Clicked Login Button",Toast.LENGTH_SHORT)
+            var valid = true
+            val userString = userEditText.text.toString()
+            val passString = passEditText.text.toString()
+            if(userString.isEmpty()){
                 userInputLayout.isErrorEnabled = true
                 userInputLayout.error = "Username must not be empty"
+                valid = false
             }
+            else if(!USER_PATTERN.containsMatchIn(userString)){
+                userInputLayout.isErrorEnabled = true
+                userInputLayout.error = "Illegal user name"
+                valid = false
+            }
+            if (passString.isEmpty()){
+                passInputLayout.isErrorEnabled = true
+                passInputLayout.error = "Password must not be empty"
+                valid = false
+            }
+            if (valid) {
+                auth.signInWithEmailAndPassword(userString, passString).addOnCompleteListener{
+                        task ->
+                    if(task.isSuccessful){
+                        val user = auth.currentUser
+                        updateLoggedInUser(user)
+                    } else {
+                        Snackbar.make(binding.root,"Login Failed",Snackbar.LENGTH_LONG).show()
+                    }
+
+                }
+            }
+
+        }
+        return binding.root
+    }
+
+    override fun onStart() {
+        super.onStart()
+        val currentUser = auth.currentUser
+        updateLoggedInUser(currentUser)
+    }
+
+    private fun updateLoggedInUser(currentUser: FirebaseUser?) {
+        if(currentUser != null){
+            Snackbar.make(binding.root,"Welcome "+currentUser.displayName,Snackbar.LENGTH_LONG).show()
+
         }
 
-        return binding.root
     }
 }
