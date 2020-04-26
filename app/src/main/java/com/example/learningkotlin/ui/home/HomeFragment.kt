@@ -6,14 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
-import com.example.learningkotlin.MainActivity
-import com.example.learningkotlin.R
+import androidx.lifecycle.get
 import com.example.learningkotlin.databinding.FragmentHomeBinding
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
@@ -29,19 +26,21 @@ class HomeFragment : Fragment() {
     private lateinit var loginButton: Button
     private lateinit var signupButton: Button
     private lateinit var binding : FragmentHomeBinding
+
+    private val model: HomeViewModel by activityViewModels()
+
     private lateinit var userInputLayout: TextInputLayout
     private lateinit var passInputLayout: TextInputLayout
     val USER_PATTERN = "^[_A-z0-9]*((-|)*[_A-z0-9])*\$".toRegex()
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         auth = FirebaseAuth.getInstance()
-        homeViewModel =
-                ViewModelProviders.of(this).get(HomeViewModel::class.java)
         binding = FragmentHomeBinding.inflate(inflater, container,false)
+        binding.lifecycleOwner = this;
 
         userInputLayout = binding.textInputLayout
         passInputLayout = binding.textInputLayout2

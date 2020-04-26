@@ -1,12 +1,26 @@
 package com.example.learningkotlin
 
-import androidx.test.platform.app.InstrumentationRegistry
+import android.content.Intent
+import androidx.databinding.DataBindingComponent
+import androidx.fragment.app.testing.launchFragmentInContainer
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.ViewInteraction_Factory.newInstance
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.base.IdlingResourceRegistry_Factory.newInstance
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
-
+import androidx.test.rule.ActivityTestRule
+import com.example.learningkotlin.ui.home.HomeFragment
+import com.example.learningkotlin.ui.home.HomeViewModel
+import com.google.common.util.concurrent.Runnables.doNothing
+import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import utils.DataBindingIdlingResourceRule
+import java.lang.reflect.Array.newInstance
 
-import org.junit.Assert.*
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -14,11 +28,31 @@ import org.junit.Assert.*
  * See [testing documentation](http://d.android.com/tools/testing).
  */
 @RunWith(AndroidJUnit4::class)
-class ExampleInstrumentedTest {
+class RobolectricActivityTest {
+
+    @Rule
+    @JvmField
+    var activityTestRule = ActivityTestRule<MainActivity>(MainActivity::class.java, true, false)
+
+    @Rule
+    @JvmField
+    val dataBindingIdlingResourceRule = DataBindingIdlingResourceRule(activityTestRule)
+
+//DataBindingIdlingResourceRule
+//    @Before
+//    fun setUp() {
+//        activityTestRule.launchActivity(Intent())
+//
+//        activityTestRule.activity.supportFragmentManager
+//            .beginTransaction()
+//            .replace(R.id.fragment_home_layout, HomeFragment())
+//            .commit()
+//    }
+
     @Test
-    fun useAppContext() {
-        // Context of the app under test.
-        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("com.example.learningkotlin", appContext.packageName)
+    fun errorShouldDisplayOnEmptyEditText() {
+        val scenario = launchFragmentInContainer<HomeFragment>()
+        onView(withId(R.id.login_button))
+            .check(matches(isDisplayed()))
     }
 }

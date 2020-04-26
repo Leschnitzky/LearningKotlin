@@ -30,9 +30,9 @@
         <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.LearningKotlin.SmallComponent</item>
         <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.MaterialComponents.MediumComponent</item>
         <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.MaterialComponents.LargeComponent</item>
-        <item name="textInputStyle">@style/Widget.MaterialComponents.TextInputLayout.FilledBox</item>
 
         <item name="materialButtonStyle">@style/Widget.LearningKotlin.Button</item>
+        <item name="textInputStyle">@style/Widget.MaterialComponents.TextInputLayout.FilledBox</item>
     </style>
 
 
@@ -57,5 +57,10 @@
         <item name="rippleColor">?attr/colorSecondaryVariant</item>
     </style>
 
+    <style name="Widget.LearningKotlin.Snackbar" parent="Widget.MaterialComponents.Snackbar"/>
+
+
+<!--    For Testing-->
+    <style name="Widget.LearningKotlin.TextInputLayoutOverlay" parent="Theme.AppCompat"/>
 
 </resources>
