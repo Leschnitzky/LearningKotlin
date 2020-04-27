@@ -1,5 +1,6 @@
 package com.example.learningkotlin.ui.home
 
+import android.R
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,37 +9,31 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
-import androidx.lifecycle.get
 import com.example.learningkotlin.databinding.FragmentHomeBinding
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+
 
 class HomeFragment : Fragment() {
 
-    private lateinit var auth: FirebaseAuth
-    private lateinit var homeViewModel: HomeViewModel
     private lateinit var userEditText: EditText
     private lateinit var passEditText: EditText
     private lateinit var loginButton: Button
     private lateinit var signupButton: Button
     private lateinit var binding : FragmentHomeBinding
-
-    private val model: HomeViewModel by activityViewModels()
+    private val homeViewModel: HomeViewModel by activityViewModels()
 
     private lateinit var userInputLayout: TextInputLayout
     private lateinit var passInputLayout: TextInputLayout
-    val USER_PATTERN = "^[_A-z0-9]*((-|)*[_A-z0-9])*\$".toRegex()
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        auth = FirebaseAuth.getInstance()
         binding = FragmentHomeBinding.inflate(inflater, container,false)
         binding.lifecycleOwner = this;
 
@@ -67,7 +62,7 @@ class HomeFragment : Fragment() {
                 userInputLayout.error = "Username must not be empty"
                 valid = false
             }
-            else if(!USER_PATTERN.containsMatchIn(userString)){
+            else if(!homeViewModel.isValidUser(userString)){
                 userInputLayout.isErrorEnabled = true
                 userInputLayout.error = "Illegal user name"
                 valid = false
@@ -78,16 +73,7 @@ class HomeFragment : Fragment() {
                 valid = false
             }
             if (valid) {
-                auth.signInWithEmailAndPassword(userString, passString).addOnCompleteListener{
-                        task ->
-                    if(task.isSuccessful){
-                        val user = auth.currentUser
-                        updateLoggedInUser(user)
-                    } else {
-                        Snackbar.make(binding.root,"Login Failed",Snackbar.LENGTH_LONG).show()
-                    }
-
-                }
+                homeViewModel.signInWithUserAndPass(userString,passString)
             }
 
         }
@@ -96,14 +82,13 @@ class HomeFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        val currentUser = auth.currentUser
+        val currentUser = homeViewModel.getCurrentUser()
         updateLoggedInUser(currentUser)
     }
 
     private fun updateLoggedInUser(currentUser: FirebaseUser?) {
         if(currentUser != null){
             Snackbar.make(binding.root,"Welcome "+currentUser.displayName,Snackbar.LENGTH_LONG).show()
-
         }
 
     }
