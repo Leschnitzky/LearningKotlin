@@ -1,6 +1,5 @@
 package com.example.learningkotlin.ui.home
 
-import android.R
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,20 +9,19 @@ import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.learningkotlin.databinding.FragmentHomeBinding
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseUser
 
 
-class HomeFragment : Fragment() {
+class LoginFragment : Fragment() {
 
     private lateinit var userEditText: EditText
     private lateinit var passEditText: EditText
     private lateinit var loginButton: Button
     private lateinit var signupButton: Button
     private lateinit var binding : FragmentHomeBinding
-    private val homeViewModel: HomeViewModel by activityViewModels()
+    private val userLoginViewModel: UserLoginViewModel by activityViewModels()
 
     private lateinit var userInputLayout: TextInputLayout
     private lateinit var passInputLayout: TextInputLayout
@@ -62,7 +60,7 @@ class HomeFragment : Fragment() {
                 userInputLayout.error = "Username must not be empty"
                 valid = false
             }
-            else if(!homeViewModel.isValidUser(userString)){
+            else if(!userLoginViewModel.isValidUser(userString)){
                 userInputLayout.isErrorEnabled = true
                 userInputLayout.error = "Illegal user name"
                 valid = false
@@ -73,7 +71,7 @@ class HomeFragment : Fragment() {
                 valid = false
             }
             if (valid) {
-                homeViewModel.signInWithUserAndPass(userString,passString)
+                userLoginViewModel.signInWithUserAndPass(userString,passString)
             }
 
         }
@@ -82,7 +80,7 @@ class HomeFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        val currentUser = homeViewModel.getCurrentUser()
+        val currentUser = userLoginViewModel.getCurrentUser()
         updateLoggedInUser(currentUser)
     }
 

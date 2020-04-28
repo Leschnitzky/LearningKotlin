@@ -1,28 +1,19 @@
 package com.example.learningkotlin
 
-import android.content.Intent
-import androidx.databinding.DataBindingComponent
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.ViewInteraction_Factory.newInstance
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.base.IdlingResourceRegistry_Factory.newInstance
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
-import com.example.learningkotlin.ui.home.HomeFragment
-import com.example.learningkotlin.ui.home.HomeViewModel
-import com.google.common.util.concurrent.Runnables.doNothing
-import junit.framework.Assert.assertEquals
+import com.example.learningkotlin.ui.home.LoginFragment
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import utils.DataBindingIdlingResourceRule
-import utils.hasTextInputLayoutHintText
-import java.lang.reflect.Array.newInstance
 
 
 /**
@@ -31,7 +22,7 @@ import java.lang.reflect.Array.newInstance
  * See [testing documentation](http://d.android.com/tools/testing).
  */
 @RunWith(AndroidJUnit4::class)
-class HomeFragmentTests {
+class LoginFragmentTests {
 
     @Rule
     @JvmField
@@ -43,7 +34,7 @@ class HomeFragmentTests {
     val scenario = null
     @Before
     fun setUP(){
-        val scenario = launchFragmentInContainer<HomeFragment>()
+        val scenario = launchFragmentInContainer<LoginFragment>()
     }
 
     @Test

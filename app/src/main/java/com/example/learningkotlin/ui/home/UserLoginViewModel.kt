@@ -7,7 +7,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthCredential
 
 
-class HomeViewModel : ViewModel() {
+class UserLoginViewModel : ViewModel() {
     val USER_PATTERN = "^[_A-z0-9]*((-|)*[_A-z0-9])*\$".toRegex()
     val firebaseAuthRepository = FirebaseAuthRepository()
     var authenticatedUserLiveData: LiveData<FirebaseUser>? = null

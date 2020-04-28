@@ -6,19 +6,19 @@
     <color name="colorPrimaryLight">@color/blue_300</color>
 
 
-    <color name="colorSecondary">@color/purple_500</color>
-    <color name="colorSecondaryVariant">@color/purple_700</color>
-    <color name="colorSecondaryDark">@color/purple_700</color>
+    <color name="colorSecondary">@color/brown_500</color>
+    <color name="colorSecondaryVariant">@color/brown_700</color>
+    <color name="colorSecondaryDark">@color/brown_700</color>
     <color name="colorError">@color/red_500</color>
     <color name="colorOnError">@color/white</color>
 
     <color name="colorOnPrimary">@color/white</color>
     <color name="colorOnSecondary">@color/white</color>
-    <color name="colorSurface">@color/yellow_500</color>
+    <color name="colorSurface">@color/yellow_100</color>
 
     <color name="red_50">#ffebee</color>
     <color name="red_100">#ffcdd2</color>
-    <color name="red_200">#ef9a9a</color>
+    <color name="red_200">#ef09a9</color>
     <color name="red_300">#e57373</color>
     <color name="red_400">#ef5350</color>
     <color name="red_500">#f44336</color>
