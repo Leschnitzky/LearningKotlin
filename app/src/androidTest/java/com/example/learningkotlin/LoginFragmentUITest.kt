@@ -8,7 +8,7 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
-import com.example.learningkotlin.ui.home.LoginFragment
+import com.example.learningkotlin.ui.login.LoginFragment
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

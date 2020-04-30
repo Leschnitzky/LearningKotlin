@@ -9,17 +9,15 @@ import com.google.firebase.auth.FirebaseUser
 class FirebaseAuthRepository {
     val auth :FirebaseAuth = FirebaseAuth.getInstance()
 
-    fun getCurrentUser(): FirebaseUser? {
-        return auth.currentUser
-    }
 
-    fun signInWithGoogleCredentials(authCredential: AuthCredential) : LiveData<FirebaseUser>?{
-        val user = MutableLiveData<FirebaseUser>()
+    fun signInWithGoogleCredentials(authCredential: AuthCredential) : LiveData<User>?{
+        val user = MutableLiveData<User>()
         auth.signInWithCredential(authCredential)
             .addOnCompleteListener() { task ->
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
-                    user.value = auth.currentUser
+                    val fbuser = auth.currentUser
+                    user.value = User(fbuser?.displayName,"",true)
                 } else {
                     user.value = null
                 }
@@ -27,13 +25,14 @@ class FirebaseAuthRepository {
         return user
     }
 
-    fun signInWithGoogleWithUserAndPass(username: String,pass: String) : LiveData<FirebaseUser>?{
-        val user = MutableLiveData<FirebaseUser>()
+    fun signInWithGoogleWithUserAndPass(username: String,pass: String) : LiveData<User>?{
+        val user = MutableLiveData<User>()
         auth.signInWithEmailAndPassword(username,pass)
             .addOnCompleteListener() { task ->
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
-                    user.value = auth.currentUser
+                    val fbuser = auth.currentUser
+                    user.value = User(fbuser?.displayName,pass,false)
                 } else {
                     user.value = null
                 }

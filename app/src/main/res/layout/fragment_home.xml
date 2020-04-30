@@ -8,7 +8,7 @@
         android:id="@+id/fragment_home_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.home.LoginFragment">
+        tools:context=".ui.login.LoginFragment">
 
         <Button
             android:id="@+id/login_button"

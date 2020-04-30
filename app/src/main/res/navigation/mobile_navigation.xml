@@ -7,17 +7,20 @@
 
     <fragment
         android:id="@+id/nav_home"
-        android:name="com.example.learningkotlin.ui.home.LoginFragment"
+        android:name="com.example.learningkotlin.ui.login.LoginFragment"
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_home">
 
         <action
             android:id="@+id/action_HomeFragment_to_HomeSecondFragment"
             app:destination="@id/nav_home_second" />
+        <action
+            android:id="@+id/action_nav_home_to_signUpFragment"
+            app:destination="@id/signUpFragment" />
     </fragment>
     <fragment
         android:id="@+id/nav_home_second"
-        android:name="com.example.learningkotlin.ui.home.HomeSecondFragment"
+        android:name="com.example.learningkotlin.ui.login.HomeSecondFragment"
         android:label="@string/home_second"
         tools:layout="@layout/fragment_home_second">
         <action
@@ -40,4 +43,9 @@
         android:name="com.example.learningkotlin.ui.slideshow.SlideshowFragment"
         android:label="@string/menu_slideshow"
         tools:layout="@layout/fragment_slideshow" />
+    <fragment
+        android:id="@+id/signUpFragment"
+        android:name="com.example.learningkotlin.ui.login.SignUpFragment"
+        android:label="fragment_sign_up"
+        tools:layout="@layout/fragment_sign_up" />
 </navigation>

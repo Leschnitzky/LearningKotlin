@@ -11,7 +11,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.example.learningkotlin.ui.home.UserLoginViewModel
+import com.example.learningkotlin.ui.login.UserLoginViewModel
 import com.google.android.material.navigation.NavigationView
 
 class MainActivity : AppCompatActivity() {
@@ -48,10 +48,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
-        if(userLoginViewModel.getCurrentUser() == null){
-            val nav_Menu: Menu =  (findViewById<NavigationView>(R.id.nav_view)).menu
-            nav_Menu.findItem(R.id.nav_gallery).isVisible = false
-            nav_Menu.findItem(R.id.nav_slideshow).isVisible = false
+        if(userLoginViewModel.authenticatedUserLiveData?.value == null){
+            val navMenu: Menu =  (findViewById<NavigationView>(R.id.nav_view)).menu
+            navMenu.findItem(R.id.nav_gallery).isVisible = false
+            navMenu.findItem(R.id.nav_slideshow).isVisible = false
 
         }
         return super.onPrepareOptionsMenu(menu)

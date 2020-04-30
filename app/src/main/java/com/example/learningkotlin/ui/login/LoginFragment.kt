@@ -1,4 +1,4 @@
-package com.example.learningkotlin.ui.home
+package com.example.learningkotlin.ui.login
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,10 +8,14 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
+import com.example.learningkotlin.R
+import com.example.learningkotlin.data.User
 import com.example.learningkotlin.databinding.FragmentHomeBinding
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
-import com.google.firebase.auth.FirebaseUser
+import kotlin.math.sign
 
 
 class LoginFragment : Fragment() {
@@ -72,21 +76,27 @@ class LoginFragment : Fragment() {
             }
             if (valid) {
                 userLoginViewModel.signInWithUserAndPass(userString,passString)
+                userLoginViewModel.authenticatedUserLiveData?.observe(viewLifecycleOwner, Observer {
+                    user ->
+                    if (user != null) {
+                        updateLoggedInUser(user)
+                    }
+                } )
             }
 
+        }
+
+        signupButton = binding.signUpButton
+        signupButton.setOnClickListener {
+            Thread.sleep(40)
+            findNavController().navigate(R.id.action_nav_home_to_signUpFragment)
         }
         return binding.root
     }
 
-    override fun onStart() {
-        super.onStart()
-        val currentUser = userLoginViewModel.getCurrentUser()
-        updateLoggedInUser(currentUser)
-    }
-
-    private fun updateLoggedInUser(currentUser: FirebaseUser?) {
+    private fun updateLoggedInUser(currentUser: User?) {
         if(currentUser != null){
-            Snackbar.make(binding.root,"Welcome "+currentUser.displayName,Snackbar.LENGTH_LONG).show()
+            Snackbar.make(binding.root,"Welcome "+currentUser.username,Snackbar.LENGTH_LONG).show()
         }
 
     }
