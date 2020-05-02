@@ -26,4 +26,13 @@ class UserLoginViewModel : ViewModel() {
     fun signInWithUserAndPass(user : String, pass: String) {
         authenticatedUserLiveData = firebaseAuthRepository.signInWithGoogleWithUserAndPass(user,pass);
     }
+
+    //Todo: check how to look for in Firebase
+    fun isEmailInDB(emailString: String?): Boolean {
+        return false
+    }
+
+    fun signUpWithUser(user: User) {
+
+    }
 }

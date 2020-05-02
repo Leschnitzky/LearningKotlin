@@ -17,7 +17,11 @@ class FirebaseAuthRepository {
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
                     val fbuser = auth.currentUser
-                    user.value = User(fbuser?.displayName,"",true)
+                    val fullName = fbuser?.displayName
+                    val splittedName = fullName?.split(" ")
+                    val firstName = if(splittedName.isNullOrEmpty()) splittedName!![0] else ""
+                    val lastName = if(splittedName.isNullOrEmpty()) splittedName[1] else ""
+                    user.value = User(fbuser?.displayName,"",firstName, lastName,true)
                 } else {
                     user.value = null
                 }
@@ -32,7 +36,11 @@ class FirebaseAuthRepository {
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
                     val fbuser = auth.currentUser
-                    user.value = User(fbuser?.displayName,pass,false)
+                    val fullName = fbuser?.displayName
+                    val splittedName = fullName?.split(" ")
+                    val firstName = if(splittedName.isNullOrEmpty()) splittedName!![0] else ""
+                    val lastName = if(splittedName.isNullOrEmpty()) splittedName[1] else ""
+                    user.value = User(fbuser?.displayName,pass,firstName,lastName,false)
                 } else {
                     user.value = null
                 }

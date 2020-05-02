@@ -64,11 +64,6 @@ class LoginFragment : Fragment() {
                 userInputLayout.error = "Username must not be empty"
                 valid = false
             }
-            else if(!userLoginViewModel.isValidUser(userString)){
-                userInputLayout.isErrorEnabled = true
-                userInputLayout.error = "Illegal user name"
-                valid = false
-            }
             if (passString.isEmpty()){
                 passInputLayout.isErrorEnabled = true
                 passInputLayout.error = "Password must not be empty"
@@ -96,7 +91,7 @@ class LoginFragment : Fragment() {
 
     private fun updateLoggedInUser(currentUser: User?) {
         if(currentUser != null){
-            Snackbar.make(binding.root,"Welcome "+currentUser.username,Snackbar.LENGTH_LONG).show()
+            Snackbar.make(binding.root,"Welcome "+currentUser.email,Snackbar.LENGTH_LONG).show()
         }
 
     }
