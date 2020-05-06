@@ -1,4 +1,4 @@
-package com.example.learningkotlin.ui.login
+package com.example.learningkotlin.ui.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,9 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.activityViewModels
-import com.example.learningkotlin.data.User
+import com.example.learningkotlin.data.model.User
 
 import com.example.learningkotlin.databinding.FragmentSignUpBinding
+import com.example.learningkotlin.ui.viewmodels.UserLoginViewModel
 import com.google.android.material.textfield.TextInputLayout
 
 /**
@@ -70,12 +71,14 @@ class SignUpFragment : Fragment() {
                 val lastNameString = getStringFromInputLayout(lastName)
                 val emailString = getStringFromInputLayout(email)
                 val passwordString = getStringFromInputLayout(password)
-                userLoginViewModel.signUpWithUser(User(
-                    firstName = firstNameString!!,
-                    lastName = lastNameString!!,
-                    email = emailString!!,
-                    password = passwordString!!
-                ))
+                userLoginViewModel.signUpWithUser(
+                    User(
+                        firstName = firstNameString!!,
+                        lastName = lastNameString!!,
+                        email = emailString!!,
+                        password = passwordString!!
+                    )
+                )
             }
         }
         return binding.root

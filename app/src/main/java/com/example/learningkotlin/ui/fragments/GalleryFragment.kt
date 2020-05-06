@@ -1,4 +1,4 @@
-package com.example.learningkotlin.ui.gallery
+package com.example.learningkotlin.ui.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.learningkotlin.R
+import com.example.learningkotlin.ui.viewmodels.GalleryViewModel
 
 class GalleryFragment : Fragment() {
 

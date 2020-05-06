@@ -1,16 +1,23 @@
-package com.example.learningkotlin.ui.login
+package com.example.learningkotlin.ui.viewmodels
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.learningkotlin.data.FirebaseAuthRepository
-import com.example.learningkotlin.data.User
+import com.example.learningkotlin.data.repositories.FirebaseAuthRepository
+import com.example.learningkotlin.data.model.ErrorEvent
+import com.example.learningkotlin.data.repositories.FirestoreRepository
+import com.example.learningkotlin.data.model.User
 import com.google.firebase.auth.GoogleAuthCredential
 
 
 class UserLoginViewModel : ViewModel() {
 
+    val signInError: MutableLiveData<ErrorEvent> = MutableLiveData()
     val USER_PATTERN = "^[_A-z0-9]*((-|)*[_A-z0-9])*\$".toRegex()
-    val firebaseAuthRepository = FirebaseAuthRepository()
+    val firebaseAuthRepository =
+        FirebaseAuthRepository()
+    val firestoreRepository =
+        FirestoreRepository()
     var authenticatedUserLiveData: LiveData<User>? = null
 
 
@@ -24,7 +31,7 @@ class UserLoginViewModel : ViewModel() {
     }
 
     fun signInWithUserAndPass(user : String, pass: String) {
-        authenticatedUserLiveData = firebaseAuthRepository.signInWithGoogleWithUserAndPass(user,pass);
+        authenticatedUserLiveData = firebaseAuthRepository.signInWithGoogleWithUserAndPass(user,pass,signInError);
     }
 
     //Todo: check how to look for in Firebase
@@ -33,6 +40,7 @@ class UserLoginViewModel : ViewModel() {
     }
 
     fun signUpWithUser(user: User) {
-
+        firebaseAuthRepository.createUser(user)
     }
+
 }

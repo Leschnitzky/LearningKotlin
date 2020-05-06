@@ -8,7 +8,7 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
-import com.example.learningkotlin.ui.login.LoginFragment
+import com.example.learningkotlin.ui.fragments.LoginFragment
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -70,7 +70,7 @@ class LoginFragmentTests {
     @Test
     fun shouldDisplayIllegalUserTextIfUserContainsSpace() {
         val faultyUserText = "Test Test"
-        onView(withId(R.id.login_user_edit_text)).perform(typeText(faultyUserText))
+        onView(withId(R.id.login_mail_edit_text)).perform(typeText(faultyUserText))
         onView(withId(R.id.login_button)).perform(click())
 
         onView(withText("Illegal user name")).check(matches(isDisplayed()))
