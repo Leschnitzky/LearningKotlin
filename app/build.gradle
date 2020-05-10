@@ -44,15 +44,14 @@ android {
 dependencies {
 
 
-    testImplementation 'org.mockito:mockito-inline:2.8.47'
     testImplementation 'android.arch.lifecycle:livedata:1.1.1'
     implementation 'com.google.firebase:firebase-auth:19.3.1'
+    androidTestImplementation "io.mockk:mockk-android:1.10.0"
     testImplementation "org.robolectric:robolectric:4.2.1"
     debugImplementation 'androidx.fragment:fragment-testing:1.2.4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test:rules:1.2.0'
-    androidTestImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
     implementation 'com.google.firebase:firebase-analytics:17.4.0'
     implementation 'com.google.firebase:firebase-firestore-ktx:21.4.3'
     implementation "com.android.databinding:compiler:3.6.1"

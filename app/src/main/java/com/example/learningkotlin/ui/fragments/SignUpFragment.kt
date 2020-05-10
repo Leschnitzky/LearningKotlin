@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.activityViewModels
+import com.example.learningkotlin.R
 import com.example.learningkotlin.data.model.User
 
 import com.example.learningkotlin.databinding.FragmentSignUpBinding
@@ -51,11 +52,11 @@ class SignUpFragment : Fragment() {
             }
             val emailString = getStringFromInputLayout(email)
 
-            if (userLoginViewModel.isEmailInDB(emailString)) {
-                email.isErrorEnabled = true
-                email.error = "A User with the same email address already exists"
-                valid = false
-            }
+//            userLoginViewModel.isEmailInDB(emailString)) {
+//                email.isErrorEnabled = true
+//                email.error = "A User with the same email address already exists"
+//                valid = false
+//            }
 
             val passwordString = getStringFromInputLayout(password)
             val passwordConfirmString = getStringFromInputLayout(passwordConfirm)
@@ -100,7 +101,7 @@ class SignUpFragment : Fragment() {
 
         if(textInputString.isNullOrEmpty()){
             textInputLayout.isErrorEnabled = true
-            textInputLayout.error = "The following box is empty"
+            textInputLayout.error = resources.getString(R.string.error_empty_field)
             isValid = false
         }
         return isValid

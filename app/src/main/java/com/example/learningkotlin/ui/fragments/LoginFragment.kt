@@ -10,11 +10,13 @@ import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.example.learningkotlin.R
 import com.example.learningkotlin.data.model.ErrorEvent
 import com.example.learningkotlin.data.model.User
 import com.example.learningkotlin.databinding.FragmentLoginBinding
+import com.example.learningkotlin.ui.viewmodels.GalleryViewModel
 import com.example.learningkotlin.ui.viewmodels.UserLoginViewModel
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
@@ -22,15 +24,15 @@ import com.google.android.material.textfield.TextInputLayout
 
 class LoginFragment : Fragment() {
 
-    private lateinit var userEditText: EditText
+    private lateinit var emailEditText: EditText
     private lateinit var passEditText: EditText
     private lateinit var loginButton: Button
     private lateinit var signupButton: Button
     private lateinit var progressBar: ProgressBar
     private lateinit var binding: FragmentLoginBinding
-    private val userLoginViewModel: UserLoginViewModel by activityViewModels()
+    private lateinit var userLoginViewModel: UserLoginViewModel
 
-    private lateinit var userInputLayout: TextInputLayout
+    private lateinit var emailInputLayout: TextInputLayout
     private lateinit var passInputLayout: TextInputLayout
 
 
@@ -39,17 +41,17 @@ class LoginFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        userLoginViewModel = ViewModelProviders.of(this).get(UserLoginViewModel::class.java)
         binding = FragmentLoginBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = this;
-
         progressBar = binding.progressBar
         progressBar.visibility = View.INVISIBLE
-        userInputLayout = binding.textInputLayout
+        emailInputLayout = binding.textInputLayout
         passInputLayout = binding.textInputLayout2
-        userEditText = binding.loginMailEditText
-        userEditText.setOnFocusChangeListener { _, hasFocus ->
+        emailEditText = binding.loginMailEditText
+        emailEditText.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus)
-                userInputLayout.isErrorEnabled = false
+                emailInputLayout.isErrorEnabled = false
         }
         passEditText = binding.loginPassEditText
         passEditText.setOnFocusChangeListener { _, hasFocus ->
@@ -60,20 +62,29 @@ class LoginFragment : Fragment() {
 
         loginButton.setOnClickListener {
             var valid = true
-            val userString = userEditText.text.toString()
+            val emailString = emailEditText.text.toString()
             val passString = passEditText.text.toString()
-            if (userString.isEmpty()) {
-                userInputLayout.isErrorEnabled = true
-                userInputLayout.error = "Username must not be empty"
+            if (emailString.isEmpty()) {
+                emailInputLayout.isErrorEnabled = true
+                emailInputLayout.error = resources.getString(R.string.empty_email_error)
                 valid = false
             }
             if (passString.isEmpty()) {
                 passInputLayout.isErrorEnabled = true
-                passInputLayout.error = "Password must not be empty"
+                passInputLayout.error = resources.getString(R.string.empty_password_error)
+                valid = false
+            }
+
+            if(!userLoginViewModel.isValidEmail(emailString)){
+                // Dont Overlap errors
+                if(!emailInputLayout.isErrorEnabled) {
+                    emailInputLayout.isErrorEnabled = true
+                    emailInputLayout.error = resources.getString(R.string.badly_formatted_email)
+                }
                 valid = false
             }
             if (valid) {
-                userLoginViewModel.signInWithUserAndPass(userString, passString)
+                userLoginViewModel.signInWithUserAndPass(emailString, passString)
                 userLoginViewModel.authenticatedUserLiveData?.observe(
                     viewLifecycleOwner,
                     Observer { user ->
@@ -94,7 +105,6 @@ class LoginFragment : Fragment() {
 
         signupButton = binding.signUpButton
         signupButton.setOnClickListener {
-            Thread.sleep(40)
             findNavController().navigate(R.id.action_nav_home_to_signUpFragment)
         }
         return binding.root

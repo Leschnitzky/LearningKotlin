@@ -2,8 +2,7 @@ package com.example.learningkotlin
 
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.action.ViewActions.typeText
+import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -24,17 +23,10 @@ import utils.DataBindingIdlingResourceRule
 @RunWith(AndroidJUnit4::class)
 class LoginFragmentTests {
 
-    @Rule
-    @JvmField
-    var activityTestRule = ActivityTestRule<MainActivity>(MainActivity::class.java, true, false)
-
-    @Rule
-    @JvmField
-    val dataBindingIdlingResourceRule = DataBindingIdlingResourceRule(activityTestRule)
     val scenario = null
     @Before
     fun setUP(){
-        val scenario = launchFragmentInContainer<LoginFragment>()
+        val scenario = launchFragmentInContainer<LoginFragment>(themeResId = R.style.Theme_AppCompat)
     }
 
     @Test
@@ -54,26 +46,32 @@ class LoginFragmentTests {
     }
 
     @Test
-    fun shouldDisplayEmptyUserTextErrorIfNothingFilledIn() {
-        onView(withId(R.id.login_button)).perform(click())
-
-        onView(withText("Username must not be empty")).check(matches(isDisplayed()))
+    fun shouldDisplayEmptyEmailTextErrorIfNothingFilledIn() {
+        onView(withId(R.id.login_button))
+            .perform(click())
+        onView(withText("Email must not be empty")).check(matches(isDisplayed()))
     }
 
     @Test
     fun shouldDisplayEmptyPassTextErrorIfNothingFilledIn() {
-        onView(withId(R.id.login_button)).perform(click())
+        onView(withId(R.id.login_button))
+            .perform(click())
 
         onView(withText("Password must not be empty")).check(matches(isDisplayed()))
     }
 
     @Test
-    fun shouldDisplayIllegalUserTextIfUserContainsSpace() {
-        val faultyUserText = "Test Test"
-        onView(withId(R.id.login_mail_edit_text)).perform(typeText(faultyUserText))
-        onView(withId(R.id.login_button)).perform(click())
+    fun shouldDisplayIllegalEmailTextIfUserContainsSpace() {
+        val faultyUserText = "test#gmail.com"
+        onView(withId(R.id.login_mail_edit_text))
+            .perform(typeText(faultyUserText))
+            .perform(closeSoftKeyboard())
+        onView(withId(R.id.login_button))
+            .perform(click())
 
-        onView(withText("Illegal user name")).check(matches(isDisplayed()))
+        onView(withText("Illegal email format")).check(matches(isDisplayed()))
     }
+
+
 
 }
