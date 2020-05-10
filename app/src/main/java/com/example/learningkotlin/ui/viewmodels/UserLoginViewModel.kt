@@ -11,10 +11,8 @@ import com.google.firebase.auth.GoogleAuthCredential
 import com.google.firebase.ktx.Firebase
 
 
-class UserLoginViewModel constructor(): ViewModel() {
+class UserLoginViewModel constructor(val authRepository: FirebaseAuthRepository, val firestoreRepository: FirestoreRepository): ViewModel() {
 
-    val authRepo = FirebaseAuthRepository()
-    val firestoreRepo = FirestoreRepository()
     val signInError: MutableLiveData<ErrorEvent> = MutableLiveData()
     val EMAIL_PATTERN = "(?:[a-z0-9!#\$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#\$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])".toRegex()
     var authenticatedUserLiveData: LiveData<User>? = null
@@ -27,21 +25,21 @@ class UserLoginViewModel constructor(): ViewModel() {
 
 
     fun signInWithGoogleCredentials(googleAuthCredential : GoogleAuthCredential) {
-        authenticatedUserLiveData = authRepo.signInWithGoogleCredentials(googleAuthCredential);
+        authenticatedUserLiveData = authRepository.signInWithGoogleCredentials(googleAuthCredential);
     }
 
     fun signInWithUserAndPass(user : String, pass: String) {
-        authenticatedUserLiveData = authRepo.signInWithGoogleWithUserAndPass(user,pass,signInError);
+        authenticatedUserLiveData = authRepository.signInWithGoogleWithUserAndPass(user,pass,signInError);
     }
 
     //Todo: check how to look for in Firebase
     fun isEmailInDB(emailString: String): LiveData<Boolean> {
-        emailIsInDB = firestoreRepo.checkEmailInDB(emailString)
+        emailIsInDB = firestoreRepository.checkEmailInDB(emailString)
         return emailIsInDB!!
     }
 
     fun signUpWithUser(user: User) {
-        authRepo.createUser(user)
+        authRepository.createUser(user)
     }
 
 }

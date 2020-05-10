@@ -47,13 +47,4 @@ class MainActivity : AppCompatActivity() {
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
-        if(userLoginViewModel.authenticatedUserLiveData?.value == null){
-            val navMenu: Menu =  (findViewById<NavigationView>(R.id.nav_view)).menu
-            navMenu.findItem(R.id.nav_gallery).isVisible = false
-            navMenu.findItem(R.id.nav_slideshow).isVisible = false
-
-        }
-        return super.onPrepareOptionsMenu(menu)
-    }
 }

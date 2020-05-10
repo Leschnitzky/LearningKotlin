@@ -10,14 +10,18 @@ import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.example.learningkotlin.R
 import com.example.learningkotlin.data.model.ErrorEvent
 import com.example.learningkotlin.data.model.User
+import com.example.learningkotlin.data.repositories.FirebaseAuthRepository
+import com.example.learningkotlin.data.repositories.FirestoreRepository
 import com.example.learningkotlin.databinding.FragmentLoginBinding
 import com.example.learningkotlin.ui.viewmodels.GalleryViewModel
 import com.example.learningkotlin.ui.viewmodels.UserLoginViewModel
+import com.weatherapp.util.UserLoginViewModelFactory
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
 
@@ -30,6 +34,7 @@ class LoginFragment : Fragment() {
     private lateinit var signupButton: Button
     private lateinit var progressBar: ProgressBar
     private lateinit var binding: FragmentLoginBinding
+    lateinit var userLoginViewModelFactory: ViewModelProvider.Factory
     private lateinit var userLoginViewModel: UserLoginViewModel
 
     private lateinit var emailInputLayout: TextInputLayout
@@ -41,7 +46,8 @@ class LoginFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        userLoginViewModel = ViewModelProviders.of(this).get(UserLoginViewModel::class.java)
+        userLoginViewModelFactory = UserLoginViewModelFactory(FirestoreRepository(),FirebaseAuthRepository())
+        userLoginViewModel = ViewModelProvider(this, userLoginViewModelFactory)[UserLoginViewModel::class.java]
         binding = FragmentLoginBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = this;
         progressBar = binding.progressBar
