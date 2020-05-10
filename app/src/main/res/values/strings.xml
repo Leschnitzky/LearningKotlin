@@ -38,5 +38,6 @@
     <string name="empty_email_error">Email must not be empty</string>
     <string name="badly_formatted_email">Illegal email format</string>
     <string name="error_empty_field">The following field is empty</string>
+    <string name="error_password_must_match">Passwords must match</string>
 
 </resources>

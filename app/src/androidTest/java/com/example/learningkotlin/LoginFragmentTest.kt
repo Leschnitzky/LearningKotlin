@@ -61,7 +61,7 @@ class LoginFragmentTests {
     }
 
     @Test
-    fun shouldDisplayIllegalEmailTextIfUserContainsSpace() {
+    fun shouldDisplayIllegalEmailTextIfFormatisNotCorrect() {
         val faultyUserText = "test#gmail.com"
         onView(withId(R.id.login_mail_edit_text))
             .perform(typeText(faultyUserText))

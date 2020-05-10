@@ -7,12 +7,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModelProvider
 import com.example.learningkotlin.R
 import com.example.learningkotlin.data.model.User
+import com.example.learningkotlin.data.repositories.FirebaseAuthRepository
+import com.example.learningkotlin.data.repositories.FirestoreRepository
 
 import com.example.learningkotlin.databinding.FragmentSignUpBinding
 import com.example.learningkotlin.ui.viewmodels.UserLoginViewModel
 import com.google.android.material.textfield.TextInputLayout
+import com.weatherapp.util.UserLoginViewModelFactory
 
 /**
  * A simple [Fragment] subclass.
@@ -25,7 +29,8 @@ class SignUpFragment : Fragment() {
     private lateinit var password: TextInputLayout
     private lateinit var passwordConfirm: TextInputLayout
     private lateinit var submitButton: Button
-    private val userLoginViewModel: UserLoginViewModel by activityViewModels()
+    lateinit var userLoginViewModelFactory: ViewModelProvider.Factory
+    private lateinit var userLoginViewModel: UserLoginViewModel
     private lateinit var binding : FragmentSignUpBinding
 
     override fun onCreateView(
@@ -33,6 +38,11 @@ class SignUpFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        userLoginViewModelFactory = UserLoginViewModelFactory(
+            FirestoreRepository(),
+            FirebaseAuthRepository()
+        )
+        userLoginViewModel = ViewModelProvider(this, userLoginViewModelFactory)[UserLoginViewModel::class.java]
         binding = FragmentSignUpBinding.inflate(inflater, container,false)
         binding.lifecycleOwner = this;
 
@@ -48,9 +58,15 @@ class SignUpFragment : Fragment() {
         submitButton.setOnClickListener {
             var valid = true
             arrayOf(firstName, lastName, password, passwordConfirm, email).forEach {
-                valid = displayEmptyErrorIfNeeded(it)
+                valid = displayEmptyErrorIfNeeded(it) && valid
             }
             val emailString = getStringFromInputLayout(email)
+
+            if(emailString != null && !userLoginViewModel.isValidEmail(emailString) && emailString.isNotEmpty()){
+                email.isErrorEnabled = true
+                email.error = resources.getString(R.string.badly_formatted_email)
+                valid = false
+            }
 
 //            userLoginViewModel.isEmailInDB(emailString)) {
 //                email.isErrorEnabled = true
@@ -61,9 +77,9 @@ class SignUpFragment : Fragment() {
             val passwordString = getStringFromInputLayout(password)
             val passwordConfirmString = getStringFromInputLayout(passwordConfirm)
 
-            if(passwordConfirmString != passwordString){
+            if(passwordConfirmString != passwordString && passwordConfirmString!!.isNotEmpty()){
                 password.isErrorEnabled = true
-                password.error = "Passwords must match"
+                password.error = resources.getString(R.string.error_password_must_match)
                 valid = false
             }
 

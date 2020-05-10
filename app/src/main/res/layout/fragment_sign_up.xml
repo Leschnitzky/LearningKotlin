@@ -24,6 +24,7 @@
             app:layout_constraintTop_toBottomOf="@id/welcomeText">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/sign_up_first_name_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -42,6 +43,7 @@
             app:layout_constraintTop_toBottomOf="@id/welcomeText">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/sign_up_last_name_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 />
@@ -73,6 +75,7 @@
             app:layout_constraintTop_toBottomOf="@+id/sign_up_first_name">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/sign_up_email_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -90,6 +93,7 @@
             app:layout_constraintTop_toBottomOf="@+id/sign_up_email">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/sign_up_password_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 />
@@ -139,6 +143,7 @@
             app:layout_constraintTop_toBottomOf="@+id/sign_up_password">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/sign_up_confirm_password_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 />
