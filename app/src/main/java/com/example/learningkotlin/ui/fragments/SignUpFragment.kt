@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.learningkotlin.R
 import com.example.learningkotlin.data.model.User
@@ -15,7 +16,11 @@ import com.example.learningkotlin.data.repositories.FirestoreRepository
 
 import com.example.learningkotlin.databinding.FragmentSignUpBinding
 import com.example.learningkotlin.ui.viewmodels.UserLoginViewModel
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.weatherapp.util.UserLoginViewModelFactory
 
 /**
@@ -39,8 +44,8 @@ class SignUpFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         userLoginViewModelFactory = UserLoginViewModelFactory(
-            FirestoreRepository(),
-            FirebaseAuthRepository()
+            FirestoreRepository.getInstance(Firebase.firestore),
+            FirebaseAuthRepository.getInstance(FirebaseAuth.getInstance())
         )
         userLoginViewModel = ViewModelProvider(this, userLoginViewModelFactory)[UserLoginViewModel::class.java]
         binding = FragmentSignUpBinding.inflate(inflater, container,false)
@@ -77,7 +82,13 @@ class SignUpFragment : Fragment() {
             val passwordString = getStringFromInputLayout(password)
             val passwordConfirmString = getStringFromInputLayout(passwordConfirm)
 
-            if(passwordConfirmString != passwordString && passwordConfirmString!!.isNotEmpty()){
+            if(!userLoginViewModel.isValidPassword(passwordString!!) && !passwordString.isNullOrEmpty()){
+                password.isErrorEnabled = true
+                password.error = resources.getString(R.string.error_password_weak)
+                valid = false
+            }
+
+            if(userLoginViewModel.isValidPassword(passwordString) && passwordConfirmString != passwordString && passwordConfirmString!!.isNotEmpty()){
                 password.isErrorEnabled = true
                 password.error = resources.getString(R.string.error_password_must_match)
                 valid = false
@@ -88,7 +99,7 @@ class SignUpFragment : Fragment() {
                 val lastNameString = getStringFromInputLayout(lastName)
                 val emailString = getStringFromInputLayout(email)
                 val passwordString = getStringFromInputLayout(password)
-                userLoginViewModel.signUpWithUser(
+                userLoginViewModel.signUpWithUserToFirebase(
                     User(
                         firstName = firstNameString!!,
                         lastName = lastNameString!!,
@@ -97,7 +108,16 @@ class SignUpFragment : Fragment() {
                     )
                 )
             }
+            userLoginViewModel.createdUserLiveData?.observe(viewLifecycleOwner, Observer {
+                    user ->
+                userLoginViewModel.addUserDataToFirestore(user)
+                userLoginViewModel.fullUserLiveData!!.observe(viewLifecycleOwner, Observer {
+                        user ->
+                    Snackbar.make(binding.root, "ADDED TO FIRESTORE ${user.firstName} ${user.lastName}", Snackbar.LENGTH_LONG).show()
+                })
+            })
         }
+
         return binding.root
     }
 

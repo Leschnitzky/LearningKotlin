@@ -10,20 +10,28 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthException
 
 
-class FirebaseAuthRepository {
-    val auth :FirebaseAuth = FirebaseAuth.getInstance()
+class FirebaseAuthRepository private constructor(val firebaseAuth: FirebaseAuth) {
+
     companion object {
-        public const val TAG :String = "FirebaseAuth";
+        const val TAG :String = "FirebaseAuthERROR";
+        const val TAG2 :String = "FirebaseAuthDEBUG";
+        var instance : FirebaseAuthRepository? = null
+        fun getInstance(firebaseAuth: FirebaseAuth) : FirebaseAuthRepository{
+            if(instance == null){
+                return FirebaseAuthRepository(firebaseAuth)
+            }
+            return instance!!
+        }
     }
 
 
     fun signInWithGoogleCredentials(authCredential: AuthCredential) : LiveData<User>?{
         val user = MutableLiveData<User>()
-        auth.signInWithCredential(authCredential)
+        firebaseAuth.signInWithCredential(authCredential)
             .addOnCompleteListener() { task ->
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
-                    val fbuser = auth.currentUser
+                    val fbuser = firebaseAuth.currentUser
                     val fullName = fbuser?.displayName
                     val splittedName = fullName?.split(" ")
                     val firstName = if(splittedName.isNullOrEmpty()) splittedName!![0] else ""
@@ -48,11 +56,11 @@ class FirebaseAuthRepository {
         signInError: MutableLiveData<ErrorEvent>
     ) : LiveData<User>?{
         val user = MutableLiveData<User>()
-        auth.signInWithEmailAndPassword(username,pass)
+        firebaseAuth.signInWithEmailAndPassword(username,pass)
             .addOnCompleteListener() { task ->
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
-                    val fbuser = auth.currentUser
+                    val fbuser = firebaseAuth.currentUser
                     val firstName = fbuser?.displayName ?: ""
                     val lastName = ""
                     user.value = User(
@@ -63,7 +71,7 @@ class FirebaseAuthRepository {
                         false
                     )
                 } else {
-                    logErrorMessage(task.exception?.message)
+                    Log.e(TAG,task.exception?.message)
                     when((task.exception as FirebaseAuthException?)!!.errorCode){
                         "ERROR_USER_NOT_FOUND" -> {signInError.value = ErrorEvent.USERNAME_DOES_NOT_EXIST}
                         "ERROR_WRONG_PASSWORD" -> {signInError.value = ErrorEvent.WRONG_PASSWORD}
@@ -75,36 +83,18 @@ class FirebaseAuthRepository {
 
     fun createUser(user: User) : LiveData<User> {
         val userData = MutableLiveData<User>()
-        auth.createUserWithEmailAndPassword(user.email!!,user.password).addOnCompleteListener { task ->
+        firebaseAuth.createUserWithEmailAndPassword(user.email!!,user.password).addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                val fbuser = auth.currentUser
-                val fullName = fbuser?.displayName
-                val splittedName = fullName?.split(" ")
-                val firstName = if(splittedName.isNullOrEmpty()) splittedName!![0] else ""
-                val lastName = if(splittedName.isNullOrEmpty()) splittedName[1] else ""
-
-                userData.value = User(
-                    fbuser?.displayName,
-                    user.password,
-                    firstName,
-                    lastName,
-                    false
-                )
+                user.uid = firebaseAuth.currentUser!!.uid
+                userData.value = user
+                Log.v(TAG2,"ADDED $user")
             }
             else {
-                logErrorMessage(task.exception?.message);
+                Log.e(TAG,task.exception?.message);
             }
         }
         return userData
     }
 
-    private fun logErrorMessage(message: String?) {
-        if(message == null) {
-            return
-        } else {
-            Log.d(TAG,message)
-        }
-
-    }
 
 }

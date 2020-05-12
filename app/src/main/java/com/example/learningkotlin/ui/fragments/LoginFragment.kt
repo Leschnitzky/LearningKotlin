@@ -24,6 +24,9 @@ import com.example.learningkotlin.ui.viewmodels.UserLoginViewModel
 import com.weatherapp.util.UserLoginViewModelFactory
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 
 class LoginFragment : Fragment() {
@@ -46,7 +49,10 @@ class LoginFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        userLoginViewModelFactory = UserLoginViewModelFactory(FirestoreRepository(),FirebaseAuthRepository())
+        userLoginViewModelFactory = UserLoginViewModelFactory(FirestoreRepository.getInstance(
+            Firebase.firestore),
+            FirebaseAuthRepository.getInstance(FirebaseAuth.getInstance())
+        )
         userLoginViewModel = ViewModelProvider(this, userLoginViewModelFactory)[UserLoginViewModel::class.java]
         binding = FragmentLoginBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = this;

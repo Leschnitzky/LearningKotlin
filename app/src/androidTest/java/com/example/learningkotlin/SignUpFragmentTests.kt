@@ -67,6 +67,34 @@ class SignUpFragmentTests {
         onView(withId(R.id.sign_up_btn_confirmation)).perform(click())
         onView(withId(R.id.sign_up_email)).check(matches(hasTextInputLayoutErrorText("The following field is empty")))
     }
+    @Test
+    fun shouldDisplayErrorIfPasswordsDontMatch() {
+        onView(withId(R.id.sign_up_password_edit_text))
+            .perform(typeText("1234568aa"))
+            .perform(closeSoftKeyboard())
+        onView(withId(R.id.sign_up_confirm_password_edit_text))
+            .perform(typeText("1234567"))
+            .perform(closeSoftKeyboard())
+        onView(withId(R.id.sign_up_btn_confirmation)).perform(click())
+
+
+        onView(withId(R.id.sign_up_password)).check(matches(hasTextInputLayoutErrorText("Passwords must match")))
+    }
+
+    @Test
+    fun shouldDisplayErrorIfPasswordIsWeak() {
+        onView(withId(R.id.sign_up_password_edit_text))
+            .perform(typeText("123457"))
+            .perform(closeSoftKeyboard())
+        onView(withId(R.id.sign_up_confirm_password_edit_text))
+            .perform(typeText("123456"))
+            .perform(closeSoftKeyboard())
+        onView(withId(R.id.sign_up_btn_confirmation)).perform(click())
+
+
+        onView(withId(R.id.sign_up_password)).check(matches(hasTextInputLayoutErrorText("Password length must be at least 8, contain at least 1 letter and number")))
+    }
+
 
 
     @Test

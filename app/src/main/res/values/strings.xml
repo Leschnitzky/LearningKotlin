@@ -39,5 +39,6 @@
     <string name="badly_formatted_email">Illegal email format</string>
     <string name="error_empty_field">The following field is empty</string>
     <string name="error_password_must_match">Passwords must match</string>
+    <string name="error_password_weak">Password length must be at least 8, contain at least 1 letter and number</string>
 
 </resources>
