@@ -33,12 +33,13 @@
 
 <!--    Error handling-->
     <string name="empty_password_error">Password must not be empty</string>
-    <string name="error_user_no_exist">Email doesn\'t exist</string>
-    <string name="error_wrong_password">Wrong password</string>
+    <string name="error_user_no_exist">Email doesn\'t exist in our database</string>
+    <string name="error_wrong_password">Wrong password, please try a different one</string>
     <string name="empty_email_error">Email must not be empty</string>
     <string name="badly_formatted_email">Illegal email format</string>
     <string name="error_empty_field">The following field is empty</string>
     <string name="error_password_must_match">Passwords must match</string>
     <string name="error_password_weak">Password length must be at least 8, contain at least 1 letter and number</string>
+    <string name="error_user_already_exists">A user with this email already exists, please log in or user another</string>
 
 </resources>

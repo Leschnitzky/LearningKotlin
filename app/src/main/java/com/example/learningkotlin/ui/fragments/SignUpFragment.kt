@@ -9,7 +9,9 @@ import android.widget.Button
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.example.learningkotlin.R
+import com.example.learningkotlin.data.model.ErrorEvent
 import com.example.learningkotlin.data.model.User
 import com.example.learningkotlin.data.repositories.FirebaseAuthRepository
 import com.example.learningkotlin.data.repositories.FirestoreRepository
@@ -73,12 +75,6 @@ class SignUpFragment : Fragment() {
                 valid = false
             }
 
-//            userLoginViewModel.isEmailInDB(emailString)) {
-//                email.isErrorEnabled = true
-//                email.error = "A User with the same email address already exists"
-//                valid = false
-//            }
-
             val passwordString = getStringFromInputLayout(password)
             val passwordConfirmString = getStringFromInputLayout(passwordConfirm)
 
@@ -113,8 +109,13 @@ class SignUpFragment : Fragment() {
                 userLoginViewModel.addUserDataToFirestore(user)
                 userLoginViewModel.fullUserLiveData!!.observe(viewLifecycleOwner, Observer {
                         user ->
-                    Snackbar.make(binding.root, "ADDED TO FIRESTORE ${user.firstName} ${user.lastName}", Snackbar.LENGTH_LONG).show()
+                    findNavController().navigate(R.id.action_signUpFragment_to_nav_gallery)
                 })
+            })
+            userLoginViewModel.signUpError.observe(viewLifecycleOwner, Observer {
+                if(it != ErrorEvent.NONE){
+                    Snackbar.make(binding.root, resources.getString(R.string.error_user_already_exists), Snackbar.LENGTH_LONG).show()
+                }
             })
         }
 

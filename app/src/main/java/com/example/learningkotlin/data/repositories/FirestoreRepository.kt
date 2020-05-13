@@ -3,8 +3,11 @@ package com.example.learningkotlin.data.repositories
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.learningkotlin.data.model.ErrorEvent
 import com.example.learningkotlin.data.model.User
+import com.example.learningkotlin.data.model.firestore.UserFirestoreDoc
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.toObject
 
 class FirestoreRepository private constructor(val database: FirebaseFirestore){
     companion object {
@@ -21,13 +24,15 @@ class FirestoreRepository private constructor(val database: FirebaseFirestore){
         }
     }
 
-    fun addUser(user: User): LiveData<User> {
+    fun addUser(
+        user: User
+    ): LiveData<User> {
         val liveDataToRet = MutableLiveData<User>()
-        val userData = hashMapOf(
-            "uid" to user.uid,
-            "firstName" to user.firstName,
-            "lastName" to user.lastName,
-            "email" to user.email
+        val userData = UserFirestoreDoc(
+            user.email!!,
+            user.firstName,
+            user.lastName,
+            user.uid
         )
         database.collection(USER_TABLE_NAME).add(userData).addOnSuccessListener {
             liveDataToRet.value = user
@@ -43,6 +48,18 @@ class FirestoreRepository private constructor(val database: FirebaseFirestore){
         // Do the operation
 
         return isInDB
+    }
+
+    fun getUserData(user: User): LiveData<User>? {
+        val userData = MutableLiveData<User>()
+        database.collection(USER_TABLE_NAME)
+            .whereEqualTo("email",user.email)
+            .get()
+            .addOnSuccessListener {
+                documents ->
+                userData.value = documents.documents.first().toObject<UserFirestoreDoc>()?.toUser()
+            }
+        return userData
     }
 }
 

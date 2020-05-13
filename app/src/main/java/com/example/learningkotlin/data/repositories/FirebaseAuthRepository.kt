@@ -81,7 +81,10 @@ class FirebaseAuthRepository private constructor(val firebaseAuth: FirebaseAuth)
         return user
     }
 
-    fun createUser(user: User) : LiveData<User> {
+    fun createUser(
+        user: User,
+        signUpError: MutableLiveData<ErrorEvent>
+    ) : LiveData<User> {
         val userData = MutableLiveData<User>()
         firebaseAuth.createUserWithEmailAndPassword(user.email!!,user.password).addOnCompleteListener { task ->
             if (task.isSuccessful) {
@@ -90,10 +93,25 @@ class FirebaseAuthRepository private constructor(val firebaseAuth: FirebaseAuth)
                 Log.v(TAG2,"ADDED $user")
             }
             else {
-                Log.e(TAG,task.exception?.message);
+                Log.e(TAG,task.exception?.message)
+                when((task.exception as FirebaseAuthException?)!!.errorCode){
+                        "ERROR_EMAIL_ALREADY_IN_USE" -> {signUpError.value = ErrorEvent.USERNAME_ALREADY_EXISTS}
+                  }
             }
         }
         return userData
+    }
+
+    fun getCurrentUser(): User {
+        val fbuser = firebaseAuth.currentUser
+        return User(
+            fbuser?.email,
+            "",
+            "",
+            "",
+            false
+        )
+
     }
 
 

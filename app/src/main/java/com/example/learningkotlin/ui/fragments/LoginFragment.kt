@@ -102,6 +102,7 @@ class LoginFragment : Fragment() {
                     Observer { user ->
                         if (user != null) {
                             updateLoggedInUser(user)
+                            findNavController().navigate(R.id.action_nav_home_to_nav_gallery)
                         }
                     })
                 userLoginViewModel.signInError.observe(viewLifecycleOwner,
