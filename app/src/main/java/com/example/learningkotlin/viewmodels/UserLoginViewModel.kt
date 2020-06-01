@@ -1,4 +1,4 @@
-package com.example.learningkotlin.ui.viewmodels
+package com.example.learningkotlin.viewmodels
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -8,6 +8,7 @@ import com.example.learningkotlin.data.model.ErrorEvent
 import com.example.learningkotlin.data.repositories.FirestoreRepository
 import com.example.learningkotlin.data.model.User
 import com.google.firebase.auth.GoogleAuthCredential
+import javax.inject.Inject
 
 
 class UserLoginViewModel constructor(val authRepository: FirebaseAuthRepository, val firestoreRepository: FirestoreRepository): ViewModel() {

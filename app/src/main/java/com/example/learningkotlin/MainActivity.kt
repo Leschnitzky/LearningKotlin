@@ -2,28 +2,40 @@ package com.example.learningkotlin
 
 import android.os.Bundle
 import android.view.Menu
-import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.get
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.example.learningkotlin.ui.viewmodels.UserLoginViewModel
+import com.example.learningkotlin.viewmodels.GalleryViewModel
+import com.example.learningkotlin.viewmodels.UserLoginViewModel
+import com.example.learningkotlin.viewmodels.ViewModelProviderFactory
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import dagger.android.support.DaggerAppCompatActivity
+import javax.inject.Inject
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : DaggerAppCompatActivity() {
+
+    @Inject
+    lateinit var providerFactory: ViewModelProviderFactory
+
 
     private lateinit var appBarConfiguration: AppBarConfiguration
-    private val userLoginViewModel: UserLoginViewModel by viewModels()
+    private lateinit var galleryViewModel: GalleryViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
+
+        galleryViewModel = ViewModelProviders.of(this, providerFactory).get(GalleryViewModel::class.java)
 
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         val navView: NavigationView = findViewById(R.id.nav_view)

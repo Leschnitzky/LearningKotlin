@@ -12,8 +12,8 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.learningkotlin.R
 import com.example.learningkotlin.data.repositories.FirebaseAuthRepository
 import com.example.learningkotlin.data.repositories.FirestoreRepository
-import com.example.learningkotlin.ui.viewmodels.GalleryViewModel
-import com.example.learningkotlin.ui.viewmodels.UserLoginViewModel
+import com.example.learningkotlin.viewmodels.GalleryViewModel
+import com.example.learningkotlin.viewmodels.UserLoginViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase

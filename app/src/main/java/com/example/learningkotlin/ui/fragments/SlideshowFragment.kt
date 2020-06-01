@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.learningkotlin.R
-import com.example.learningkotlin.ui.viewmodels.SlideshowViewModel
+import com.example.learningkotlin.viewmodels.SlideshowViewModel
 
 class SlideshowFragment : Fragment() {
 

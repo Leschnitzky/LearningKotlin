@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.learningkotlin.data.repositories.FirebaseAuthRepository
 import com.example.learningkotlin.data.repositories.FirestoreRepository
-import com.example.learningkotlin.ui.viewmodels.UserLoginViewModel
+import com.example.learningkotlin.viewmodels.UserLoginViewModel
 
 
 class UserLoginViewModelFactory constructor(

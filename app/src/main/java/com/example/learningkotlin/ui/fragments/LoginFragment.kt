@@ -7,11 +7,8 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.example.learningkotlin.R
 import com.example.learningkotlin.data.model.ErrorEvent
@@ -19,17 +16,17 @@ import com.example.learningkotlin.data.model.User
 import com.example.learningkotlin.data.repositories.FirebaseAuthRepository
 import com.example.learningkotlin.data.repositories.FirestoreRepository
 import com.example.learningkotlin.databinding.FragmentLoginBinding
-import com.example.learningkotlin.ui.viewmodels.GalleryViewModel
-import com.example.learningkotlin.ui.viewmodels.UserLoginViewModel
+import com.example.learningkotlin.viewmodels.UserLoginViewModel
 import com.weatherapp.util.UserLoginViewModelFactory
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import dagger.android.support.DaggerFragment
 
 
-class LoginFragment : Fragment() {
+class LoginFragment : DaggerFragment() {
 
     private lateinit var emailEditText: EditText
     private lateinit var passEditText: EditText
@@ -49,8 +46,8 @@ class LoginFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        userLoginViewModelFactory = UserLoginViewModelFactory(FirestoreRepository.getInstance(
-            Firebase.firestore),
+        userLoginViewModelFactory = UserLoginViewModelFactory(
+            FirestoreRepository.getInstance(Firebase.firestore),
             FirebaseAuthRepository.getInstance(FirebaseAuth.getInstance())
         )
         userLoginViewModel = ViewModelProvider(this, userLoginViewModelFactory)[UserLoginViewModel::class.java]

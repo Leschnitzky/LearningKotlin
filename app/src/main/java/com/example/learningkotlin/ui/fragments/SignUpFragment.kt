@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -17,7 +16,7 @@ import com.example.learningkotlin.data.repositories.FirebaseAuthRepository
 import com.example.learningkotlin.data.repositories.FirestoreRepository
 
 import com.example.learningkotlin.databinding.FragmentSignUpBinding
-import com.example.learningkotlin.ui.viewmodels.UserLoginViewModel
+import com.example.learningkotlin.viewmodels.UserLoginViewModel
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
