@@ -6,15 +6,19 @@ data class UserFirestoreDoc(
     val email: String = "",
     val firstName: String = "",
     val lastName: String = "",
-    val uid: String = ""
+    val uid: String = "",
+    val summoner: String = "",
+    val region: String = ""
 ){
     fun toUser(): User{
         return User(
             email = email,
-            firstName = firstName,
             password = "",
+            firstName = firstName,
             lastName = lastName,
-            uid = uid
+            uid = uid,
+            summoner = summoner,
+            region = region
         )
     }
 }

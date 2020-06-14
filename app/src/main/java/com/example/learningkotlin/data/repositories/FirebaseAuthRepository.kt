@@ -41,7 +41,10 @@ class FirebaseAuthRepository private constructor(val firebaseAuth: FirebaseAuth)
                         "",
                         firstName,
                         lastName,
-                        true
+                        true,
+                        "",
+                        "",
+                        ""
                     )
                 } else {
                     user.value = null
@@ -68,7 +71,10 @@ class FirebaseAuthRepository private constructor(val firebaseAuth: FirebaseAuth)
                         pass,
                         firstName,
                         lastName,
-                        false
+                        false,
+                        "",
+                        "",
+                        ""
                     )
                 } else {
                     Log.e(TAG,task.exception?.message)
@@ -109,7 +115,10 @@ class FirebaseAuthRepository private constructor(val firebaseAuth: FirebaseAuth)
             "",
             "",
             "",
-            false
+            false,
+            "",
+            "",
+            ""
         )
 
     }

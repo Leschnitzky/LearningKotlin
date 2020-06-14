@@ -32,7 +32,9 @@ class FirestoreRepository private constructor(val database: FirebaseFirestore){
             user.email!!,
             user.firstName,
             user.lastName,
-            user.uid
+            user.uid,
+            user.summoner,
+            user.region
         )
         database.collection(USER_TABLE_NAME).add(userData).addOnSuccessListener {
             liveDataToRet.value = user

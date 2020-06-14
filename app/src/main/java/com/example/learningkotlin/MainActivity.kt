@@ -22,6 +22,9 @@ import javax.inject.Inject
 
 class MainActivity : DaggerAppCompatActivity() {
 
+    companion object {
+        const val API_KEY : String = "17ad389a-2875-49f5-8631-0b9a558b1bf6"
+    }
     @Inject
     lateinit var providerFactory: ViewModelProviderFactory
 

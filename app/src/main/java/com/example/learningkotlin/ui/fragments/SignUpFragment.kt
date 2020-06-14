@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AbsSpinner
 import android.widget.Button
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -12,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.learningkotlin.R
 import com.example.learningkotlin.data.model.ErrorEvent
 import com.example.learningkotlin.data.model.User
+import com.example.learningkotlin.data.model.retrofit.Summoner
 import com.example.learningkotlin.data.repositories.FirebaseAuthRepository
 import com.example.learningkotlin.data.repositories.FirestoreRepository
 
@@ -23,6 +25,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.weatherapp.util.UserLoginViewModelFactory
+import io.reactivex.rxjava3.schedulers.Schedulers
 
 /**
  * A simple [Fragment] subclass.
@@ -30,6 +33,8 @@ import com.weatherapp.util.UserLoginViewModelFactory
 class SignUpFragment : Fragment() {
 
     private lateinit var firstName: TextInputLayout
+    private lateinit var spinner: AbsSpinner
+    private lateinit var summoner_name: TextInputLayout
     private lateinit var lastName: TextInputLayout
     private lateinit var email: TextInputLayout
     private lateinit var password: TextInputLayout
@@ -49,21 +54,17 @@ class SignUpFragment : Fragment() {
             FirebaseAuthRepository.getInstance(FirebaseAuth.getInstance())
         )
         userLoginViewModel = ViewModelProvider(this, userLoginViewModelFactory)[UserLoginViewModel::class.java]
-        binding = FragmentSignUpBinding.inflate(inflater, container,false)
-        binding.lifecycleOwner = this;
 
-        firstName = binding.signUpFirstName
-        lastName = binding.signUpLastName
-        password = binding.signUpPassword
-        email = binding.signUpEmail
-        passwordConfirm = binding.signUpConfirmPassword
+        bindWidgets(inflater,container)
+        setUILogic()
 
+        return binding.root
+    }
 
-        submitButton =  binding.signUpBtnConfirmation
-
+    private fun setUILogic() {
         submitButton.setOnClickListener {
             var valid = true
-            arrayOf(firstName, lastName, password, passwordConfirm, email).forEach {
+            arrayOf(firstName, lastName, password, passwordConfirm,summoner_name, email).forEach {
                 valid = displayEmptyErrorIfNeeded(it) && valid
             }
             val emailString = getStringFromInputLayout(email)
@@ -89,19 +90,42 @@ class SignUpFragment : Fragment() {
                 valid = false
             }
 
+            val summonerString = getStringFromInputLayout(summoner_name)
+            val regionString = spinner.selectedItem.toString()
+
+            userLoginViewModel.setRegion(regionString)
+            if(!summonerString.isNullOrEmpty()){
+                userLoginViewModel.updateSummoner(summonerString)
+            }
+
+
             if(valid){
-                val firstNameString = getStringFromInputLayout(firstName)
-                val lastNameString = getStringFromInputLayout(lastName)
-                val emailString = getStringFromInputLayout(email)
-                val passwordString = getStringFromInputLayout(password)
-                userLoginViewModel.signUpWithUserToFirebase(
-                    User(
-                        firstName = firstNameString!!,
-                        lastName = lastNameString!!,
-                        email = emailString!!,
-                        password = passwordString!!
-                    )
-                )
+
+                userLoginViewModel.summonerObservable!!.subscribeOn(Schedulers.io()).subscribe {
+                        summoner: Summoner ->
+                    if(summoner == null){
+
+                    } else {
+                        val firstNameString = getStringFromInputLayout(firstName)
+                        val lastNameString = getStringFromInputLayout(lastName)
+                        val emailString = getStringFromInputLayout(email)
+                        val passwordString = getStringFromInputLayout(password)
+                        val summonerNameString = getStringFromInputLayout(summoner_name)
+                        val regionString = regionString
+                        userLoginViewModel.signUpWithUserToFirebase(
+                            User(
+                                firstName = firstNameString!!,
+                                lastName = lastNameString!!,
+                                email = emailString!!,
+                                password = passwordString!!,
+                                summoner = summonerNameString!!,
+                                region = regionString!!
+                            )
+                        )
+                    }
+                }
+
+
             }
             userLoginViewModel.createdUserLiveData?.observe(viewLifecycleOwner, Observer {
                     user ->
@@ -117,8 +141,6 @@ class SignUpFragment : Fragment() {
                 }
             })
         }
-
-        return binding.root
     }
 
 
@@ -141,6 +163,21 @@ class SignUpFragment : Fragment() {
             isValid = false
         }
         return isValid
+    }
+
+
+    private fun bindWidgets(inflater: LayoutInflater,container: ViewGroup?) {
+        binding = FragmentSignUpBinding.inflate(inflater, container,false)
+        binding.lifecycleOwner = this;
+
+        firstName = binding.signUpFirstName
+        lastName = binding.signUpLastName
+        password = binding.signUpPassword
+        email = binding.signUpEmail
+        summoner_name = binding.signUpSummonerName
+        spinner = binding.regionSpinner
+        passwordConfirm = binding.signUpConfirmPassword
+        submitButton =  binding.signUpBtnConfirmation
     }
 
 

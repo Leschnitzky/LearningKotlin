@@ -41,5 +41,22 @@
     <string name="error_password_must_match">Passwords must match</string>
     <string name="error_password_weak">Password length must be at least 8, contain at least 1 letter and number</string>
     <string name="error_user_already_exists">A user with this email already exists, please log in or user another</string>
+    <string name="error_no_summoner">There isn\'t a summoner in that region with this summoner name</string>
 
+
+<!--    Region spinner-->
+
+    <string-array name="regions">
+        <item>BR1	</item>
+        <item>EUN1</item>
+        <item>EUW1</item>
+        <item>JP1	</item>
+        <item>KR	</item>
+        <item>LA1	</item>
+        <item>LA2	</item>
+        <item>NA1	</item>
+        <item>OC1	</item>
+        <item>TR1	</item>
+        <item>RU</item>
+    </string-array>
 </resources>
