@@ -42,9 +42,10 @@
     <string name="error_password_weak">Password length must be at least 8, contain at least 1 letter and number</string>
     <string name="error_user_already_exists">A user with this email already exists, please log in or user another</string>
     <string name="error_no_summoner">There isn\'t a summoner in that region with this summoner name</string>
+    <string name="process_dialog">Please wait...</string>
 
 
-<!--    Region spinner-->
+    <!--    Region spinner-->
 
     <string-array name="regions">
         <item>BR1	</item>

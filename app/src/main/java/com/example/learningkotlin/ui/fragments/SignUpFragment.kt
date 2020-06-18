@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AbsSpinner
 import android.widget.Button
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -33,6 +34,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 class SignUpFragment : Fragment() {
 
     private lateinit var firstName: TextInputLayout
+    private lateinit var alertDialog: AlertDialog
     private lateinit var spinner: AbsSpinner
     private lateinit var summoner_name: TextInputLayout
     private lateinit var lastName: TextInputLayout
@@ -62,7 +64,14 @@ class SignUpFragment : Fragment() {
     }
 
     private fun setUILogic() {
+
+        alertDialog = AlertDialog.Builder(requireContext())
+            .setTitle("Loading")
+            .setCancelable(false)
+            .setView(layoutInflater.inflate(R.layout.process_dialog,null))
+            .create()
         submitButton.setOnClickListener {
+            alertDialog.show()
             var valid = true
             arrayOf(firstName, lastName, password, passwordConfirm,summoner_name, email).forEach {
                 valid = displayEmptyErrorIfNeeded(it) && valid
@@ -127,16 +136,21 @@ class SignUpFragment : Fragment() {
 
 
             }
+            else {
+                alertDialog.dismiss()
+            }
             userLoginViewModel.createdUserLiveData?.observe(viewLifecycleOwner, Observer {
                     user ->
                 userLoginViewModel.addUserDataToFirestore(user)
                 userLoginViewModel.fullUserLiveData!!.observe(viewLifecycleOwner, Observer {
                         user ->
+                    alertDialog.dismiss()
                     findNavController().navigate(R.id.action_signUpFragment_to_nav_gallery)
                 })
             })
             userLoginViewModel.signUpError.observe(viewLifecycleOwner, Observer {
                 if(it != ErrorEvent.NONE){
+                    alertDialog.dismiss()
                     Snackbar.make(binding.root, resources.getString(R.string.error_user_already_exists), Snackbar.LENGTH_LONG).show()
                 }
             })

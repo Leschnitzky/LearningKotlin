@@ -1,5 +1,6 @@
 package com.example.learningkotlin.ui.fragments
 
+import android.app.ProgressDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -29,6 +31,7 @@ import dagger.android.support.DaggerFragment
 class LoginFragment : DaggerFragment() {
 
     private lateinit var emailEditText: EditText
+    private lateinit var alertDialog: AlertDialog
     private lateinit var passEditText: EditText
     private lateinit var loginButton: Button
     private lateinit var signupButton: Button
@@ -53,8 +56,6 @@ class LoginFragment : DaggerFragment() {
         userLoginViewModel = ViewModelProvider(this, userLoginViewModelFactory)[UserLoginViewModel::class.java]
         binding = FragmentLoginBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = this;
-        progressBar = binding.progressBar
-        progressBar.visibility = View.INVISIBLE
         emailInputLayout = binding.textInputLayout
         passInputLayout = binding.textInputLayout2
         emailEditText = binding.loginMailEditText
@@ -70,6 +71,14 @@ class LoginFragment : DaggerFragment() {
         loginButton = binding.loginButton
 
         loginButton.setOnClickListener {
+
+            alertDialog = AlertDialog.Builder(requireContext())
+                .setTitle("Loading")
+                .setCancelable(false)
+                .setView(layoutInflater.inflate(R.layout.process_dialog,null))
+                .create()
+
+            alertDialog.show()
             var valid = true
             val emailString = emailEditText.text.toString()
             val passString = passEditText.text.toString()
@@ -99,16 +108,21 @@ class LoginFragment : DaggerFragment() {
                     Observer { user ->
                         if (user != null) {
                             updateLoggedInUser(user)
+                            alertDialog.dismiss()
                             findNavController().navigate(R.id.action_nav_home_to_nav_gallery)
                         }
                     })
                 userLoginViewModel.signInError.observe(viewLifecycleOwner,
                     Observer { error ->
+                        alertDialog.dismiss()
                         if(error != null) {
                             displayError(error)
                         }
                     }
+
                 )
+            } else {
+                alertDialog.dismiss()
             }
 
         }
